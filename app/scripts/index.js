@@ -19,6 +19,9 @@ $(function(){
   var contactsWrapper = new views.ContactCardList({collection: contactsCollection});
   $app.append(contactsWrapper.render().el);
 
+  var formWrapper = new views.AddContactForm();
+  $app.append(formWrapper.render().el);
+
 
 
   // GET from server
@@ -43,7 +46,16 @@ $(function(){
       'phone' : '601.435.6789',
       'twitterHandle' : 'schmoe',
       'linkedIn' : 'joe-schmoe'
-    }
+    },
+    {
+      'firstName' : 'Joe',
+      'lastName' : 'Schmoe',
+      'title' : 'Back-End Engineer',
+      'email' : 'jschmoe@tiny-lasagna.com',
+      'phone' : '601.435.6789',
+      'twitterHandle' : 'schmoe',
+      'linkedIn' : 'joe-schmoe'
+    },
   ]);
 
   console.log(contactsCollection);

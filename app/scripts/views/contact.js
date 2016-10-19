@@ -1,7 +1,9 @@
 // VIEWS
 
 var Backbone = require('backbone');
+
 var contactCardTemplate = require('../../templates/contact-card.hbs');
+var formAddContact = require('../../templates/form-add-contact.hbs');
 
 // what does it mean to be a view?
 
@@ -10,7 +12,7 @@ var ContactTitle = Backbone.View.extend({
   tagName: 'h1',
   className: 'well',
   render: function(){
-    this.$el.text('Contacts');
+    this.$el.text('Developer Directory');
 
     return this;
   }
@@ -21,7 +23,7 @@ var ContactTitle = Backbone.View.extend({
 // define the wrapper/list of the contact cards
 var ContactCardList = Backbone.View.extend({
   tagName: 'div',
-  className: 'wrapper',
+  className: 'row',
   initialize: function(){
     // listen for backbone events on the collection, delegate
     // methods to handle events
@@ -47,6 +49,9 @@ var ContactCardList = Backbone.View.extend({
 var ContactCard = Backbone.View.extend({
   tagName: 'div',
   className: 'col-md-4',
+  events: {
+    'click .delete': 'deleteContact'
+  },
   initialize: function(){
     // listen for backbone events on this model
     this.listenTo(this.model, 'destroy', this.deleteContact);
@@ -61,15 +66,31 @@ var ContactCard = Backbone.View.extend({
     this.$el.html(renderedCard);
     // return the finished thing
     return this;
-  },
-  deleteContact: function(){
-    // destroy this model
   }
 
+});
+
+var AddContactForm = Backbone.View.extend({
+  tagName: 'div',
+  className: 'row',
+  events: {
+    'submit #add-contact' : 'submit'
+  },
+  template: formAddContact,
+  initialize: function(){
+    console.log('form initialized');
+  },
+  render: function(){
+    var formTemplate = this.template;
+    this.$el.html(formTemplate);
+
+    return this;
+  }
 });
 
 module.exports = {
   ContactTitle: ContactTitle,
   ContactCardList: ContactCardList,
-  ContactCard: ContactCard
+  ContactCard: ContactCard,
+  AddContactForm: AddContactForm
 };
