@@ -1,0 +1,24 @@
+
+// Bootstrap Variables
+$icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
+
+// Import Bootstrap
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+p {
+  font-size: 18px;
+}
+.contact-card{
+  box-shadow: 0 5px 12px -4px rgba(0,0,0, .3);
+  padding: 10px;
+}
