@@ -1,5 +1,6 @@
 // VIEWS
-
+var $ = require('jquery');
+var _ = require('underscore');
 var Backbone = require('backbone');
 
 var contactCardTemplate = require('../../templates/contact-card.hbs');
@@ -54,7 +55,7 @@ var ContactCard = Backbone.View.extend({
   },
   initialize: function(){
     // listen for backbone events on this model
-    this.listenTo(this.model, 'destroy', this.deleteContact);
+    // this.listenTo(this.model, 'destroy', this.remove);
   },
   template: contactCardTemplate,
   render: function(){
@@ -66,6 +67,10 @@ var ContactCard = Backbone.View.extend({
     this.$el.html(renderedCard);
     // return the finished thing
     return this;
+  },
+  deleteContact: function(){
+    $(this).remove();
+    this.model.destroy();
   }
 
 });
@@ -77,14 +82,26 @@ var AddContactForm = Backbone.View.extend({
     'submit #add-contact' : 'submit'
   },
   template: formAddContact,
-  initialize: function(){
-    console.log('form initialized');
-  },
+  // initialize: function(){
+  //   console.log('form initialized');
+  // },
   render: function(){
     var formTemplate = this.template;
     this.$el.html(formTemplate);
 
     return this;
+  },
+  submit: function(e){
+    e.preventDefault();
+    var formData = $('#add-contact').serializeArray();
+    var formEntry = {};
+    formData.forEach(function(input){
+      formEntry[input.name] = input.value;
+    });
+    // $.each(formData, function(i, input){
+    //   formEntry[input.name] = input.value;
+    // });
+    this.collection.create(formEntry);
   }
 });
 

@@ -10,7 +10,7 @@ var ContactCard = Backbone.Model.extend({
 // what is a collection of contact cards?
 var ContactCardCollection = Backbone.Collection.extend({
   model : ContactCard,
-  url: 'http://tiny-lasagna-server.herokuapp.com/collections/mtcontacts'
+  url: 'https://tiny-lasagna-server.herokuapp.com/collections/mtcontacts'
 });
 
 module.exports = {
