@@ -7,6 +7,7 @@ var Backbone = require('backbone');
 
 var contactCardTemplate = require('../../templates/contact-card.hbs');
 var formAddContact = require('../../templates/form-add-contact.hbs');
+var modalDelete = require('../../templates/modal-delete.hbs');
 
 // what does it mean to be a view?
 
@@ -77,12 +78,12 @@ var ContactCard = Backbone.View.extend({
   deleteContact: function(){
     // hook up model to this model
     deleteModal.model = this.model;
-
     deleteModal.show();
   }
 
 });
 
+// append contact form
 var AddContactForm = Backbone.View.extend({
   tagName: 'div',
   className: 'row',
@@ -109,8 +110,21 @@ var AddContactForm = Backbone.View.extend({
   }
 });
 
-var ContactModal = Backbone.View.extend({
+// modal for deleting
+var ContactDeleteModal = Backbone.View.extend({
   el : $('#delete-contact')[0],
+  // initialize: function(){
+  //   this.render();
+  // },
+  // template: modalDelete,
+  // render: function(){
+  //   var context = this.model.toJSON();
+  //   var renderedModal = this.template(context);
+  //
+  //   this.$el.html(renderedModal);
+  //
+  //   return this;
+  // },
   events: {
     'click .btn-danger': 'deleteContact'
   },
@@ -127,7 +141,7 @@ var ContactModal = Backbone.View.extend({
   }
 });
 
-var deleteModal = new ContactModal();
+var deleteModal = new ContactDeleteModal();
 
 module.exports = {
   ContactTitle: ContactTitle,
