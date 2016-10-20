@@ -1,5 +1,7 @@
 // VIEWS
-var $ = require('jquery');
+window.$ = window.jQuery = require('jquery');
+require('bootstrap-sass/assets/javascripts/bootstrap');
+
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -29,6 +31,7 @@ var ContactCardList = Backbone.View.extend({
     // listen for backbone events on the collection, delegate
     // methods to handle events
     this.listenTo(this.collection, 'add', this.renderContactCard);
+    this.listenTo(this.collection, 'remove', this.removeContactCard);
   },
   render: function(){
     return this;
@@ -55,7 +58,10 @@ var ContactCard = Backbone.View.extend({
   },
   initialize: function(){
     // listen for backbone events on this model
-    // this.listenTo(this.model, 'destroy', this.remove);
+    // apparently destroy+changed events will remove
+    // models from the page!
+    this.listenTo(this.model, 'destroy', this.remove);
+    this.listenTo(this.model, 'changed', this.render);
   },
   template: contactCardTemplate,
   render: function(){
@@ -69,8 +75,10 @@ var ContactCard = Backbone.View.extend({
     return this;
   },
   deleteContact: function(){
-    $(this).remove();
-    this.model.destroy();
+    // hook up model to this model
+    deleteModal.model = this.model;
+
+    deleteModal.show();
   }
 
 });
@@ -82,9 +90,6 @@ var AddContactForm = Backbone.View.extend({
     'submit #add-contact' : 'submit'
   },
   template: formAddContact,
-  // initialize: function(){
-  //   console.log('form initialized');
-  // },
   render: function(){
     var formTemplate = this.template;
     this.$el.html(formTemplate);
@@ -98,12 +103,31 @@ var AddContactForm = Backbone.View.extend({
     formData.forEach(function(input){
       formEntry[input.name] = input.value;
     });
-    // $.each(formData, function(i, input){
-    //   formEntry[input.name] = input.value;
-    // });
     this.collection.create(formEntry);
+    // clear the form
+    $('#add-contact')[0].reset();
   }
 });
+
+var ContactModal = Backbone.View.extend({
+  el : $('#delete-contact')[0],
+  events: {
+    'click .btn-danger': 'deleteContact'
+  },
+  hide: function(){
+    this.$el.modal('hide');
+  },
+  show: function(){
+    this.$el.modal('show');
+  },
+  deleteContact: function(){
+    this.model.destroy();
+
+    this.hide();
+  }
+});
+
+var deleteModal = new ContactModal();
 
 module.exports = {
   ContactTitle: ContactTitle,
